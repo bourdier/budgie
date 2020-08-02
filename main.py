@@ -13,17 +13,17 @@ remove_characters = [":"]
 for character in remove_characters:
     creation_time = creation_time.replace(character, "-")
 
-newPath = imgFolderPath + creation_time + '\\'
+split_string = creation_time.split(" ", 1)
+substring = split_string[0]
+
+newPath = imgFolderPath + substring + '\\'
 images = [oldPath]
 
 try:
-    os.mkdir(creation_time)
-    print(creation_time,  "created")
+    os.mkdir(substring)
+    print(substring,  "created")
     for f in images:
-        shutil.copy(f, creation_time)
-    print(newPath, "copied")
+        shutil.copy(f, substring)
+    print(imgPath, "copied")
 except FileExistsError:
-    print(creation_time, "already exists")
-
-# a.jpg
-# C:\\Users\\Théo Jeux\\Desktop\\
+    print(substring, "already exists")
