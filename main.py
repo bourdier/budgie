@@ -28,7 +28,7 @@ substring = split_string[0]
 try:
     os.mkdir(substring)
     print(substring,  "created")
-    for f in images:
+    for f in [images]:
         shutil.copy(f, substring)
     print(images, "copied")
 except FileExistsError:
