@@ -1,3 +1,3 @@
 # photosort
 
-PhotoSort is a little software made by [https://github.com/kodle](@kodle) with the help of [https://github.com/Giiltham](@Giiltham) to sort photo per date. The script import date with the metadatas.
+PhotoSort is a little software made by [@kodle](https://github.com/kodle) with the help of [@Giiltham](https://github.com/Giiltham) to sort photo per date. The script import date with the metadatas.
