@@ -4,32 +4,49 @@ import glob
 from PIL import Image
 
 folderPath = input("Image folder path:")
+imglist = []
 
 # check all files in directory
 os.chdir(folderPath)
-for images in glob.glob("*.jpg"):
-    print(images)
+for imagesname in glob.glob("*.jpg"):
+    imglist.append(imagesname)
 
-# create file from date and time (36868) exif
-img = Image.open(images)
-exif = img.getexif()
-creation_time = exif.get(36868)
+print(imglist)
 
-# replace : characters to -
-remove_characters = [":"]
-for character in remove_characters:
-    creation_time = creation_time.replace(character, "-")
+for image in imglist:
 
-# delete characters after space
-split_string = creation_time.split(" ", 1)
-substring = split_string[0]
+    # create file from date and time (36868) exif
+    img = Image.open(image)
+    exif = img.getexif()
+    creation_time = exif.get(36868)
 
-# create new directory
-try:
-    os.mkdir(substring)
-    print(substring,  "created")
-    for f in [images]:
-        shutil.copy(f, substring)
-    print(images, "copied")
-except FileExistsError:
-    print(substring, "already exists")
+    # replace : characters to -
+    remove_characters = [":"]
+    for character in remove_characters:
+        creation_time = creation_time.replace(character, "-")
+    split_string = creation_time.split(" ", 1)  # delete characters after space
+    substring = split_string[0]
+
+    # create new directory
+    try:
+        os.mkdir(substring)
+        print(substring,  "created")
+    except FileExistsError:
+        print(image, "already exists")
+
+    
+    # copy
+    try:
+        if os.path.isfile(substring + "\\" + image):
+            yn = input("Replace ? Y/N")
+            if not yn == "Y":
+                continue     
+              
+        try: 
+            shutil.copy(image, substring)
+            print(image, "copied")
+        except:
+            pass
+        
+    except:
+        pass
