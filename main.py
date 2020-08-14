@@ -1,50 +1,51 @@
 import os
 import shutil
 import glob
+import exifread
 from PIL import Image
 
-folderPath = input("Image folder path:")
-imglist = []
+imgPath = input("Path > ")
+imgFormat = input("Format > ")
+imgList = []
 
-# check all files in directory
-os.chdir(folderPath)
-for imagesname in glob.glob("*.jpg"):
-    imglist.append(imagesname)
+os.chdir(imgPath)
+for imgName in glob.glob("*." + imgFormat):
+    imgList.append(imgName)
 
-print(imglist)
+print(imgList)
 
-for image in imglist:
-
-    # create file from date and time (36868) exif
-    img = Image.open(image)
-    exif = img.getexif()
-    creation_time = exif.get(36868)
-
-    # replace : characters to -
+for img in imgList:
+    def process_img(path):
+        f = open(path, 'rb')
+        tags = exifread.process_file(f)
+        info = tags["Image DateTime"]
+        return str(info)
+    
+    exif = process_img(img)
+     
     remove_characters = [":"]
     for character in remove_characters:
-        creation_time = creation_time.replace(character, "-")
-    split_string = creation_time.split(" ", 1)  # delete characters after space
-    substring = split_string[0]
+        exif = exif.replace(character, "-")
+    splitString = exif.split(" ", 1) 
+    substring = splitString[0]
 
-    # create new directory
+    print(substring)
+
     try:
         os.mkdir(substring)
-        print(substring,  "created")
-    except FileExistsError:
-        print(image, "already exists")
-
+    except:
+        pass
     
     # copy
     try:
-        if os.path.isfile(substring + "\\" + image):
-            yn = input("Replace ? Y/N")
+        if os.path.isfile(substring + "\\" + img):
+            yn = input(img + " already exist, replace ? Y/N")
             if not yn == "Y":
                 continue     
               
         try: 
-            shutil.copy(image, substring)
-            print(image, "copied")
+            shutil.copy(img, substring)
+            print(img, "copied")
         except:
             pass
         
